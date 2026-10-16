@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %}Analysis Results - TENDERIQ{% endblock %}
+
+{% block content %}
+<div class="container my-3">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+    <div>
+      <h2 class="h3 fw-bold mb-1">Tender Analysis Report</h2>
+      <span class="badge bg-secondary">Source: {{ source }}</span>
+    </div>
+    <a href="{{ url_for('download_result', result_id=result_id) }}" class="btn btn-outline-primary">
+      <i class="bi bi-download me-1"></i> Download JSON
+    </a>
+  </div>
+
+  <!-- Overview Summary Card -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="fw-bold text-primary mb-3">Overview</h5>
+      <div class="row g-3">
+        <div class="col-md-8">
+          <p class="mb-2"><strong>Title:</strong> {{ extraction.overview.title }}</p>
+          <p class="mb-2"><strong>Issuer / Dept:</strong> {{ extraction.overview.issuing_organization }}</p>
+        </div>
+        <div class="col-md-4">
+          <p class="mb-2"><strong>Reference No:</strong> {{ extraction.overview.reference }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Risk Alerts -->
+  {% if extraction.alerts %}
+    <div class="card border-danger border-start border-4 shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="fw-bold text-danger mb-2">Attention & Risk Alerts</h5>
+        <ul class="mb-0 ps-3">
+          {% for alert in extraction.alerts %}
+            <li><strong>{{ alert.type }}:</strong> {{ alert.message }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Main Grid -->
+  <div class="row g-4 mb-4">
+    <!-- Eligibility -->
+    <div class="col-md-6">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+          <h5 class="fw-bold text-success mb-3">Eligibility Criteria</h5>
+          {% if extraction.eligibility %}
+            <ul class="ps-3 mb-0 small">
+              {% for item in extraction.eligibility %}
+                <li class="mb-1">{{ item }}</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="text-muted small mb-0">No explicit eligibility criteria detected.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Financial -->
+    <div class="col-md-6">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+          <h5 class="fw-bold text-success mb-3">Financial Requirements</h5>
+          {% if extraction.financial %}
+            <ul class="ps-3 mb-0 small">
+              {% for item in extraction.financial %}
+                <li class="mb-1">{{ item }}</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="text-muted small mb-0">No financial details detected.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Important Dates -->
+    <div class="col-md-6">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+          <h5 class="fw-bold text-success mb-3">Important Dates</h5>
+          {% if extraction.dates %}
+            <ul class="ps-3 mb-0 small">
+              {% for d in extraction.dates %}
+                <li class="mb-1">{{ d }}</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="text-muted small mb-0">No dates detected.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Mandatory Documents -->
+    <div class="col-md-6">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+          <h5 class="fw-bold text-success mb-3">Required Documents</h5>
+          {% if extraction.mandatory_docs %}
+            <ul class="ps-3 mb-0 small">
+              {% for doc in extraction.mandatory_docs %}
+                <li class="mb-1">{{ doc }}</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="text-muted small mb-0">No specific required documents listed.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Executive Summary Card (Positioned at the end) -->
+  <div class="card border-0 shadow-sm">
+    <div class="card-body">
+      <h5 class="fw-bold text-primary mb-2">Executive Summary</h5>
+      <p class="text-secondary leading-relaxed mb-0">{{ extraction.summary }}</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

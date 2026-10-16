@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h2>Analyze Document</h2>
+    <!-- Changed action from "/results" to "/analyze" to match app.py -->
+    <form action="/analyze" method="POST" enctype="multipart/form-data">
+        
+        <div class="form-group">
+            <label for="tender_text">Raw Tender Text</label>
+            <textarea name="tender_text" id="tender_text" rows="8" placeholder="Paste the tender clauses or document contents here..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="tender_file">Or Upload Text File (.txt) or PDF (.pdf)</label>
+            <input type="file" name="tender_file" id="tender_file" accept=".txt,.pdf">
+        </div>
+        
+        <!-- Optional button to load the sample tender based on your app.py logic -->
+        <div class="form-group">
+            <button type="submit" name="load_sample" value="true" class="btn" style="background-color: var(--text-muted);">Load Sample Tender</button>
+        </div>
+
+        <button type="submit" class="btn">Run NLP Extraction</button>
+    </form>
+</div>
+{% endblock %}
